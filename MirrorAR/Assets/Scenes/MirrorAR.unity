@@ -805,6 +805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myo: {fileID: 394324191}
   helpText: {fileID: 231014671}
+  spawn: {fileID: 1735997489171330, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
 --- !u!4 &1954289516
 Transform:
   m_ObjectHideFlags: 0
