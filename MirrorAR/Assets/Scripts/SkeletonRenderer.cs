@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Astra;
 
 public class SkeletonRenderer : MonoBehaviour
 {
@@ -21,6 +22,15 @@ public class SkeletonRenderer : MonoBehaviour
     public Toggle ToggleSegBodyHand = null;
 
     private Astra.BodyTrackingFeatures _previousTargetFeatures = Astra.BodyTrackingFeatures.HandPose;
+
+    public Body[] Bodies
+    {
+        get
+        {
+            return _bodies;
+        }
+
+    }
 
     void Start()
     {
