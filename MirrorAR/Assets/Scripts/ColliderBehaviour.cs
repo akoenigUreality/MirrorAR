@@ -5,9 +5,8 @@ using UnityEngine;
 
 public class ColliderBehaviour : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+    void Start () {
+
 	}
 	
 	// Update is called once per frame
@@ -19,23 +18,25 @@ public class ColliderBehaviour : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         ManagerScript manager = GameObject.Find("Manager").GetComponent<ManagerScript>();
+        if (manager.Moved)
+        {
+            manager.Counter++;
+        }
+        manager.Moved = !manager.Moved;
+        Debug.Log("count: " + manager.Counter);
+        /*
         if (GameObject.FindGameObjectsWithTag("WayPoint").Length == 1)
         {
             //manager.NextPoint += manager.Counter;
             // points inverten/neue fkt setzten für reihenfolge
             manager.Counter *= -1; // ivert direction
-            manager.SpawnRoute();
+            manager.SpawnRoute();          
         }
         else
         {
             manager.NextPoint += manager.Counter;
         }
-        manager.ThalmicMyo.Vibrate(VibrationType.Short);
-        Destroy(this.gameObject);
-        Debug.Log("next: " + manager.NextPoint);
-    }
-    private void OnTriggerEnter()
-    {
-        
+        */
+        //Destroy(this.gameObject);
     }
 }
