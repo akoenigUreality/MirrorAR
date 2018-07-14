@@ -21,15 +21,18 @@ public class ColliderBehaviour : MonoBehaviour {
         ManagerScript manager = GameObject.Find("Manager").GetComponent<ManagerScript>();
         if (GameObject.FindGameObjectsWithTag("WayPoint").Length == 1)
         {
-            manager.myo.GetComponent<ThalmicMyo>().Vibrate(VibrationType.Medium);
+            //manager.NextPoint += manager.Counter;
+            // points inverten/neue fkt setzten für reihenfolge
+            manager.Counter *= -1; // ivert direction
             manager.SpawnRoute();
         }
         else
         {
-            manager.myo.GetComponent<ThalmicMyo>().Vibrate(VibrationType.Short);
+            manager.NextPoint += manager.Counter;
         }
-        Debug.Log("collision");
+        manager.ThalmicMyo.Vibrate(VibrationType.Short);
         Destroy(this.gameObject);
+        Debug.Log("next: " + manager.NextPoint);
     }
     private void OnTriggerEnter()
     {
