@@ -12,17 +12,21 @@ using VibrationType = Thalmic.Myo.VibrationType;
 public class ManagerScript : MonoBehaviour {
     public GameObject myo = null;
     public Text helpText;
-    public GameObject spawn;
+    public GameObject colliderPrefab;
+
+    public GameObject handColliderObject;
+
 
     private ThalmicMyo thalmicMyo;
     private bool started = false;
     private SkeletonRenderer skeletonViewer;
+
     private Vector3[] jointPositions; //Nummerierung gleich Astra -> public enum JointType
     float distHandEllbow, distEllbowShoulder, distHandShoulder;
-    GameObject start, end;
+    private GameObject start, end;
     Vector3[] positions = new Vector3[5];
     Vector3 posStart, posEnd;
-    private int exercise = 2;
+    private int exercise = 0;
     private bool moved = false;
     
     
@@ -88,14 +92,36 @@ public class ManagerScript : MonoBehaviour {
         thalmicMyo = myo.GetComponent<ThalmicMyo>();
     }
 
+    public void OnColliderEntered(GameObject collider)
+    {
+        Debug.Log("HUR COLLIDER ENTERED ");
+        if (collider.name == "StartPoint")
+        {
+            counter++;
+            Debug.Log("STARTPOINT DUH!");
+            start.SetActive(false);
+            end.SetActive(true);
+        }
+
+        else if (collider.name == "EndPoint")
+        {
+            Debug.Log("ENDPOINT DUH!");
+            start.SetActive(true);
+            end.SetActive(false);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         
         if (thalmicMyo.pose == Pose.Fist && !started)
         {
+            //set collider
+            GameObject.Find("Joint_7").transform.Find("Center").GetComponent<SphereCollider>().enabled = true;
             started = true;
             counter = 0;
+            moved = false;
             ExtendUnlockAndNotifyUserAction(thalmicMyo);
             SaveStartPositions();
             Debug.Log("start");
@@ -103,17 +129,29 @@ public class ManagerScript : MonoBehaviour {
         }
         if (started)
         {
-            switch (exercise) {
-                case 1:
-                    ShoulderYZ();
-                    break;
-                case 2:
-                    ShoulderYX();
-                    break;
-                default: break;
 
+            if (counter == 5)
+            {
+                Debug.Log("change exercise");
+                started = false;
+                counter = 0;
+                GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPoint");
+                foreach (GameObject wayPoint in wayPoints)
+                    Destroy(wayPoint.gameObject);
+                exercise = (exercise + 1) % 2;
             }
-            //Check exercise
+            else {
+                switch (exercise) {
+                    case 0:
+                        ShoulderYZ();
+                        break;
+                    case 1:
+                        ShoulderYX();
+                        break;
+                    default: break;
+
+                }
+            }
         }
     }
 
@@ -123,60 +161,44 @@ public class ManagerScript : MonoBehaviour {
         var jointPos = new Vector3(rightHandPos.X / 1000f, rightHandPos.Y / 1000f, rightHandPos.Z / 1000f);
         
         if (Vector3.Distance(new Vector3(jointPos.x,0,0), new Vector3(jointPositions[7].x,0,0)) > 0.05f) {
-            Debug.Log("uffbassa! YZ");
+            //Debug.Log("uffbassa! YZ");
             //thalmicMyo.Vibrate(VibrationType.Short);
         }
-        //Toggle trigger boxes
-        if (moved)
-        {
-            start.GetComponent<BoxCollider>().enabled = true;
-            end.GetComponent<BoxCollider>().enabled = false;
-        }
-        else {
-            start.GetComponent<BoxCollider>().enabled = false;
-            end.GetComponent<BoxCollider>().enabled = true;
-        }
-        
 
     }
+
     void ShoulderYX() {
         Astra.Body body = skeletonViewer.Bodies[0];
         var rightHandPos = body.Joints[7].WorldPosition; //transform to local Position!!
         var jointPos = new Vector3(rightHandPos.X / 1000f, rightHandPos.Y / 1000f, rightHandPos.Z / 1000f);
         
         if (Vector3.Distance(new Vector3(0,0, jointPos.z), new Vector3(0,0, jointPositions[7].z)) > 0.15f) {
-            Debug.Log("uffbassa! YX");
+            //Debug.Log("uffbassa! YX");
             //thalmicMyo.Vibrate(VibrationType.Short);
         }
-        //Toggle trigger boxes
-        if (moved)
-        {
-            start.GetComponent<BoxCollider>().enabled = true;
-            end.GetComponent<BoxCollider>().enabled = false;
-        }
-        else {
-            start.GetComponent<BoxCollider>().enabled = false;
-            end.GetComponent<BoxCollider>().enabled = true;
-        }
-        
-
     }
 
     void Spawn() {
+
         switch (exercise) {
-            case 1:
+            case 0:
                 posStart = new Vector3(jointPositions[5].x, jointPositions[7].y, jointPositions[7].z);
                 posEnd = new Vector3(jointPositions[5].x, jointPositions[5].y, jointPositions[5].z - distHandShoulder);
-                start = Instantiate(spawn, posStart, Quaternion.identity);
-                start.GetComponent<BoxCollider>().enabled = false;
-                end = Instantiate(spawn, posEnd, Quaternion.identity);
+
+                start = Instantiate(colliderPrefab, posStart, Quaternion.identity);
+                start.name = "StartPoint";
+                
+                end = Instantiate(colliderPrefab, posEnd, Quaternion.identity);
+                end.name = "EndPoint";
                 break;
-            case 2:
-                posStart = new Vector3(jointPositions[5].x + distHandShoulder, jointPositions[5].y, jointPositions[5].z);
-                posEnd = new Vector3(jointPositions[5].x, jointPositions[7].y, jointPositions[7].z);
-                start = Instantiate(spawn, posStart, Quaternion.identity);
-                start.GetComponent<BoxCollider>().enabled = false;
-                end = Instantiate(spawn, posEnd, Quaternion.identity);
+            case 1:
+                posStart = new Vector3(jointPositions[5].x, jointPositions[7].y, jointPositions[7].z);
+                posEnd = new Vector3(jointPositions[5].x + distHandShoulder, jointPositions[5].y, jointPositions[5].z);
+                start = Instantiate(colliderPrefab, posStart, Quaternion.identity);
+                start.name = "StartPoint";
+
+                end = Instantiate(colliderPrefab, posEnd, Quaternion.identity);
+                end.name = "EndPoint";
                 break;
             default: break;
         }
@@ -197,6 +219,8 @@ public class ManagerScript : MonoBehaviour {
         distEllbowShoulder = Vector3.Distance(jointPositions[6], jointPositions[5]);
         distHandShoulder = Vector3.Distance(jointPositions[7], jointPositions[5]);
 
+        
+        
         //more positions:
         /*
         positions[0] = new Vector3(jointPositions[5].x, jointPositions[7].y, jointPositions[7].z);
@@ -213,7 +237,7 @@ public class ManagerScript : MonoBehaviour {
     {
         for (int i=0; i< positions.Length; i++)
         {
-            Instantiate(spawn, positions[i],Quaternion.identity);
+            Instantiate(colliderPrefab, positions[i],Quaternion.identity);
         }       
     }
 
