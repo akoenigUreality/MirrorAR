@@ -702,7 +702,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 44
+  field of view: 33
   orthographic: 0
   orthographic size: 0.5
   m_Depth: -1
@@ -734,6 +734,68 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1833073244
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735997489171330, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_Name
+      value: HandInteractor
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735997489171330, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_TagString
+      value: HandInteractor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344697634242, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &1901695745
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,7 +849,7 @@ GameObject:
   - component: {fileID: 1954289515}
   m_Layer: 0
   m_Name: Manager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -805,7 +867,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myo: {fileID: 394324191}
   helpText: {fileID: 231014671}
-  spawn: {fileID: 1735997489171330, guid: bf7cf2baf40c33745aeb5ad9e8959322, type: 2}
+  colliderPrefab: {fileID: 1735997489171330, guid: bf7cf2baf40c33745aeb5ad9e8959322,
+    type: 2}
+  handColliderObject: {fileID: 0}
 --- !u!4 &1954289516
 Transform:
   m_ObjectHideFlags: 0
